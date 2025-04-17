@@ -10,10 +10,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -31,7 +33,9 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid CreateUserRequest req) {
+        log.info("Создание нового пользователя: {}", req.getEmail());
         User user = userService.createUser(req.getName(), req.getEmail());
+        log.info("Пользователь создан: ID {}", user.getId());
         return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
 
@@ -42,6 +46,7 @@ public class UserController {
     })
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable Long id) {
+        log.info("Запрос пользователя по ID: {}", id);
         User user = userService.getUserById(id);
         return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
@@ -50,6 +55,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Список пользователей")
     @GetMapping
     public List<UserDto> getAllUsers() {
+        log.info("Запрос списка всех пользователей");
         return userService.getAllUsers().stream()
                 .map(u -> new UserDto(u.getId(), u.getName(), u.getEmail()))
                 .collect(Collectors.toList());
