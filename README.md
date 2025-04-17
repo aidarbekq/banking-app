@@ -19,6 +19,8 @@
 
 ```bash
 git clone https://github.com/aidarbekq/banking-app.git
+```
+```bash
 cd banking-app
 ````
 ##  Запуск с Docker Compose
