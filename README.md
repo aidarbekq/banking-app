@@ -32,7 +32,8 @@ cd banking-app
 ```bash
 # 1. Собери JAR-файл
 ./mvnw clean package -DskipTests
-
+````
+```bash
 # 2. Запусти сервисы
 docker-compose up --build
 ```
