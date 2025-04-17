@@ -7,7 +7,8 @@
 - PostgreSQL
 - JPA (Hibernate)
 - Flyway
-- Testcontainers (для интеграционных тестов)
+- JUnit 5, Mockito (для юнит-тестов)
+- Testcontainers (для **интеграционных тестов** с PostgreSQL)
 - Swagger (OpenAPI UI)
 - Docker & Docker Compose
 
