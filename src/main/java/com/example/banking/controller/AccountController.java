@@ -11,10 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users/{userId}/accounts")
 public class AccountController {
@@ -35,11 +37,13 @@ public class AccountController {
             @PathVariable Long userId,
             @RequestBody @Valid CreateAccountRequest req
     ) {
+        log.info("Создание счета для пользователя: {}, номер: {}", userId, req.getAccountNumber());
         Account acct = accountService.createAccount(
                 userId,
                 req.getAccountNumber(),
                 req.getInitialBalance()
         );
+        log.info("Счет создан с ID: {}", acct.getId());
         return new AccountDto(acct.getId(), acct.getAccountNumber(), acct.getBalance());
     }
 
@@ -47,6 +51,7 @@ public class AccountController {
     @ApiResponse(responseCode = "200", description = "Список счетов")
     @GetMapping
     public List<AccountDto> getAccountsByUser(@PathVariable Long userId) {
+        log.info("Получение всех счетов пользователя: {}", userId);
         return accountService.getAccountsByUser(userId).stream()
                 .map(a -> new AccountDto(a.getId(), a.getAccountNumber(), a.getBalance()))
                 .collect(Collectors.toList());
@@ -64,7 +69,9 @@ public class AccountController {
             @PathVariable Long accountId,
             @RequestBody @Valid AmountRequest req
     ) {
+        log.info("Пополнение счета {} пользователя {} на сумму {}", accountId, userId, req.getAmount());
         Account acct = accountService.deposit(accountId, req.getAmount());
+        log.info("Новый баланс: {}", acct.getBalance());
         return new AccountDto(acct.getId(), acct.getAccountNumber(), acct.getBalance());
     }
 
@@ -80,7 +87,9 @@ public class AccountController {
             @PathVariable Long accountId,
             @RequestBody @Valid AmountRequest req
     ) {
+        log.info("Списание со счета {} пользователя {} суммы {}", accountId, userId, req.getAmount());
         Account acct = accountService.withdraw(accountId, req.getAmount());
+        log.info("Оставшийся баланс: {}", acct.getBalance());
         return new AccountDto(acct.getId(), acct.getAccountNumber(), acct.getBalance());
     }
 }
