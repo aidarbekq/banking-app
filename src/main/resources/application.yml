@@ -1,1 +1,17 @@
-spring.application.name=banking-app
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/banking_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+server:
+  port: 8080
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
